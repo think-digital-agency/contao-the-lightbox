@@ -3,10 +3,12 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [1.0.0] - 2026-09-03
+## [3.0.0] - 2026-09-05
 
 Initial release — replaces `inspiredminds/contao-glightbox` in the Contao Design+
-theme (Contao 6 migration, WP-4).
+theme (Contao 6 migration, WP-4). Package version starts at the vendored
+GLightbox major version (3.x) rather than at 1.0.0 — see `docs/DECISIONS.md`
+ADR-006.
 
 ### Added
 - Vendored GLightbox 3.3.1 library and stylesheet (MIT), served as

@@ -139,3 +139,26 @@ against load-order surprises).
 - (+) Correct regardless of where Contao places the combined script.
 - (−) None — GLightbox itself binds click handlers, so deferring init by a few ms
   is invisible.
+
+---
+
+## ADR-006: Package version starts at 3.0.0, matching the vendored GLightbox major
+
+**Date:** 2026-09-05
+**Status:** Accepted
+
+**Context:**
+The bundle vendors GLightbox 3.3.1 (ADR-001). A first public release numbered
+1.0.0 would suggest an unrelated, brand-new versioning scheme and give no hint
+which GLightbox major a given bundle release wraps.
+
+**Decision:**
+The first published version is **3.0.0**, matching the vendored library's major
+version. Future bundle releases bump the minor/patch as usual; a GLightbox
+major upgrade (e.g. to 4.x) would be a corresponding bundle major bump.
+
+**Consequences:**
+- (+) The bundle version communicates which GLightbox major is inside at a
+  glance, without reading the changelog.
+- (−) The bundle's own (small) feature/fix history does not start at 1.0.0 —
+  acceptable since this is the first release, nothing depends on an earlier tag.

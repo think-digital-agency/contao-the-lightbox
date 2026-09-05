@@ -1,9 +1,11 @@
 en:
     title: Contao The Lightbox
     description: >
-        GLightbox for Contao — with zero configuration. The bundle ships the GLightbox library and wires up Contao's fullsize image links automatically.
+        No more lightbox bundles that demand a layout script, a settings page or a JavaScript template before they do anything. Install Contao The Lightbox — done. Every image with fullsize view enabled now opens in a GLightbox.
 
-        After installation every image with "fullsize / lightbox" enabled opens in a GLightbox, gallery grouping included. No layout setting, no JavaScript template, no extra steps. Compatible with Contao 5 and Contao 6.
+        Turn on "fullsize view / lightbox" on an image — that's it. On the next page load, a click opens the image in a clean, fast GLightbox instead of a new tab. Images sharing the same gallery ID are automatically grouped into a browsable gallery, no extra step required.
+
+        No layout setting, no global switch, no wizard. Just Contao, the way you'd want to show images.
     keywords:
         - lightbox
         - glightbox
@@ -11,6 +13,8 @@ en:
         - image
         - fullsize
         - modal
+        - Contao 5
+        - Contao 6
     support:
         issues: https://github.com/think-digital-agency/contao-the-lightbox/issues
         docs: https://github.com/think-digital-agency/contao-the-lightbox#readme
