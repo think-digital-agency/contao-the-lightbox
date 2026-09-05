@@ -1,0 +1,16 @@
+de:
+    title: Contao The Lightbox
+    description: >
+        GLightbox für Contao — ohne Konfiguration. Das Bundle bringt die GLightbox-Bibliothek mit und verdrahtet Contaos Vollbild-Bildlinks automatisch.
+
+        Nach der Installation öffnen alle Bilder mit aktivierter „Vollbildansicht/Lightbox" in einer GLightbox — inklusive Galerie-Gruppierung. Keine Layout-Einstellung, kein JavaScript-Template, keine weiteren Schritte. Kompatibel mit Contao 5 und Contao 6.
+    keywords:
+        - lightbox
+        - glightbox
+        - galerie
+        - bild
+        - vollbild
+        - modal
+    support:
+        issues: https://github.com/think-digital-agency/contao-the-lightbox/issues
+        docs: https://github.com/think-digital-agency/contao-the-lightbox#readme

@@ -1,0 +1,27 @@
+{
+    "name": "think-digital-agency/contao-the-lightbox",
+    "type": "contao-bundle",
+    "description": "Contao The Lightbox — drop-in GLightbox integration for Contao 5 and 6. Bundles the GLightbox library and wires up Contao's fullsize image links (a[data-lightbox]) automatically, no layout configuration required.",
+    "keywords": ["contao", "contao-bundle", "contao-extension", "lightbox", "glightbox", "gallery", "image", "fullsize", "modal"],
+    "homepage": "https://github.com/think-digital-agency/contao-the-lightbox",
+    "license": "LGPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Think Digital Agency",
+            "homepage": "https://think-digital.agency"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "contao/core-bundle": "^5.3 || ^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ThinkDigital\\ContaoTheLightbox\\": "src/"
+        }
+    },
+    "extra": {
+        "contao-manager-plugin": "ThinkDigital\\ContaoTheLightbox\\ContaoManager\\Plugin",
+        "logo": "docs/app-icon.png"
+    }
+}

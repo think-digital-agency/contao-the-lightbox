@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    ThinkDigital\ContaoTheLightbox\:
+        resource: '../../*'
+        exclude:
+            - '../../ContaoManager/'
+            - '../../DependencyInjection/'
+            - '../../ContaoTheLightboxBundle.php'
