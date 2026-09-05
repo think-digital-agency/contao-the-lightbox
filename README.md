@@ -46,19 +46,9 @@ php bin/console contao:migrate      # entfernt das alte js_glightbox aus tl_layo
 ```
 
 Registriert sich automatisch über den Contao Manager Plugin. Keine weitere
-Konfiguration.
-
-## Migration von `inspiredminds/contao-glightbox`
-
-```bash
-composer remove inspiredminds/contao-glightbox
-composer require think-digital-agency/contao-the-lightbox
-php bin/console contao:migrate
-```
-
-`RemoveGLightboxLayoutScriptMigration` entfernt den `js_glightbox`-Eintrag aus
-allen Layouts (`tl_layout.scripts`). Ein eigener JavaScript-Template-Eintrag im
-Layout ist nicht mehr nötig und nicht mehr vorgesehen.
+Konfiguration. `RemoveGLightboxLayoutScriptMigration` entfernt einen alten
+`js_glightbox`-Eintrag aus `tl_layout.scripts`, falls vorhanden — ein eigener
+JavaScript-Template-Eintrag im Layout ist nicht nötig und nicht vorgesehen.
 
 ## Anpassung der GLightbox-Optionen
 

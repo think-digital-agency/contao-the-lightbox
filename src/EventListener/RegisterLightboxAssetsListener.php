@@ -13,8 +13,8 @@ use Contao\PageRegular;
  * Registers the GLightbox stylesheet, the GLightbox library and the small init
  * script on every front end page.
  *
- * This replaces the legacy `js_glightbox` layout script template of
- * inspiredminds/contao-glightbox. That template relied on the front end page
+ * This replaces the legacy `js_glightbox` layout script template used by a
+ * previous lightbox extension. That template relied on the front end page
  * template echoing `{{ scripts }}` / `{{ mootools }}`; the Design+ theme's
  * `fe_page.html.twig` does not, so its `<script>` output silently vanished and
  * the lightbox never initialised (only its CSS side effect survived, because

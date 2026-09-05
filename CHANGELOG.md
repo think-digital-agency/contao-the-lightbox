@@ -3,10 +3,20 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.0.1] - 2026-09-05
+
+### Changed
+- Removed remaining references to the previous lightbox extension from code
+  comments and docs (kept: the `js_glightbox` layout-script value itself,
+  which is a real config value the migration matches against, not a package
+  reference).
+- Removed `docs/PUBLISHING.md` — publishing is complete, and the two sibling
+  bundles never carried this file either.
+
 ## [3.0.0] - 2026-09-05
 
-Initial release — replaces `inspiredminds/contao-glightbox` in the Contao Design+
-theme (Contao 6 migration, WP-4). Package version starts at the vendored
+Initial release — built for the Contao Design+ theme (Contao 6 migration, WP-4)
+as a drop-in GLightbox integration. Package version starts at the vendored
 GLightbox major version (3.x) rather than at 1.0.0 — see `docs/DECISIONS.md`
 ADR-006.
 

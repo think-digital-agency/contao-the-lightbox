@@ -11,7 +11,7 @@ packages/contao-the-lightbox-bundle/
 ├── docs/
 │   ├── ARCHITECTURE.md
 │   ├── DECISIONS.md
-│   └── package-metadata/{de,en}.yml
+│   └── package-metadata/{de,en,logo.svg}
 ├── public/                                         # symlinked to public/bundles/contaothelightbox/
 │   ├── css/
 │   │   └── glightbox.min.css                       # vendored GLightbox 3.3.1 stylesheet

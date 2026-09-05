@@ -12,8 +12,8 @@ use Doctrine\DBAL\Connection;
 /**
  * Removes the legacy `js_glightbox` entry from `tl_layout.scripts`.
  *
- * inspiredminds/contao-glightbox was activated by adding its `js_glightbox`
- * JavaScript template to every page layout. Once that bundle is gone the
+ * A previous lightbox extension was activated by adding its `js_glightbox`
+ * JavaScript template to every page layout. Once that extension is gone the
  * template no longer exists and Contao throws while compiling the layout, so
  * the reference has to be stripped from every layout that still carries it.
  *

@@ -2,7 +2,7 @@
 
 Bundle: **Contao The Lightbox** (`think-digital-agency/contao-the-lightbox`).
 Built for WP-4 of the Design+ Contao 6 migration (see `CONTAO6_MIGRATION.md`,
-ADR-6). Replaces `inspiredminds/contao-glightbox`.
+ADR-6) to replace the theme's previous lightbox integration.
 
 ---
 
@@ -12,7 +12,7 @@ ADR-6). Replaces `inspiredminds/contao-glightbox`.
 **Status:** Accepted
 
 **Context:**
-`inspiredminds/contao-glightbox` shipped the GLightbox build in its own
+The previous lightbox solution shipped the GLightbox build in its own
 `public/` folder (served as `bundles/contaoglightbox/…`). The Design+ theme
 additionally carried an unused, *different* GLightbox build under
 `files/theme/theme-design/js/01-libraries/glightbox.js/` (never `@import`ed, never
@@ -76,7 +76,7 @@ the page template. Mirrors how the Design+ theme registers all its own assets
 **Status:** Accepted
 
 **Context:**
-Removing `inspiredminds/contao-glightbox` deletes the `js_glightbox` template.
+Removing the previous lightbox extension deletes the `js_glightbox` template.
 Any layout that still lists it in `scripts` makes Contao throw while compiling the
 layout. Customer sites have this value on every Design+ layout, with arbitrary row
 ids.
