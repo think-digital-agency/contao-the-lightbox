@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.0.2] - 2026-09-06
+
+### Documentation
+- DECISIONS.md references the theme's `DECISIONS.md` instead of its old migration doc.
+
 ## [3.0.1] - 2026-09-05
 
 ### Changed

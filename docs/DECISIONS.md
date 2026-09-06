@@ -1,8 +1,8 @@
 # DECISIONS.md – Architecture Decision Records
 
 Bundle: **Contao The Lightbox** (`think-digital-agency/contao-the-lightbox`).
-Built for WP-4 of the Design+ Contao 6 migration (see `CONTAO6_MIGRATION.md`,
-ADR-6) to replace the theme's previous lightbox integration.
+Built for the Design+ Contao 6 migration (see the theme's `DECISIONS.md`,
+lightbox section) to replace the theme's previous lightbox integration.
 
 ---
 
