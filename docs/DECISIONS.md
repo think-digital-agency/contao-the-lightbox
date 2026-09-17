@@ -162,3 +162,47 @@ major upgrade (e.g. to 4.x) would be a corresponding bundle major bump.
   glance, without reading the changelog.
 - (−) The bundle's own (small) feature/fix history does not start at 1.0.0 —
   acceptable since this is the first release, nothing depends on an earlier tag.
+
+---
+
+## ADR-007: Asset injection moved from the `generatePage` hook to a `kernel.response` listener
+
+**Date:** 2026-09-17
+**Status:** Accepted — supersedes the mechanism chosen in ADR-002 (the
+underlying goal, "assets independent of the page template", is unchanged)
+
+**Context:**
+Issue #1 reported that the lightbox stopped working on front end pages built
+with Contao's Twig-based content composition (slot) layouts, the same class
+of theme ADR-002 was written to support. Those pages are built by
+`Contao\CoreBundle\Controller\Page\RegularPageController`, a Symfony
+controller that renders straight through Twig template inheritance and never
+instantiates the legacy `Contao\PageRegular` class. Since `$GLOBALS['TL_HOOKS']['generatePage']`
+is only ever called from inside `PageRegular::generate()`, it does not fire
+for these pages at all — not "fires but the template drops the output" (the
+problem ADR-002 solved), but "never fires", so `$GLOBALS['TL_CSS']` /
+`$GLOBALS['TL_JAVASCRIPT']` are never populated and
+`ReplaceDynamicScriptTagsListener` has nothing to inject.
+
+**Decision:**
+Replace `RegisterLightboxAssetsListener` (the hook) with
+`InjectLightboxAssetsListener`, a `#[AsEventListener(event: KernelEvents::RESPONSE)]`
+listener that appends the `<link>`/`<script>` tags directly into the final
+HTML response (stylesheet before `</head>`, scripts before `</body>`), guarded
+to frontend-scope, main-request, `text/html` responses only. This is the same
+pattern `contao-live-preview`'s `InjectPreviewScriptListener` already uses in
+production. Operating on the finished Response is a strict superset of the
+hook: every front end page produces one, regardless of which controller or
+template built it — legacy `PageRegular` pages included.
+
+**Consequences:**
+- (+) Works for both the legacy and the Twig/content-composition rendering
+  path — closes the actual gap, not just the symptom ADR-002 addressed.
+- (+) One asset-injection mechanism instead of two; no risk of the hook and
+  the response listener double-injecting on pages where both would fire.
+- (+) Verified locally against both `contao/core-bundle:^5.3` and `^6.0`.
+- (−) String-replaces `</head>`/`</body>` in the rendered body rather than
+  using Contao's asset registry, so it no longer benefits from
+  `ReplaceDynamicScriptTagsListener`'s combining/versioning. Acceptable: this
+  bundle only ever added its own three fixed, `|static`-equivalent assets: no
+  dynamic combination was happening for them regardless.

@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.0.2] - 2026-09-17
+
+### Fixed
+- CSS and JS were not injected on front end pages using Contao's Twig-based
+  content composition (slot) layouts: those pages render through
+  `RegularPageController` and never fire the legacy `generatePage` hook this
+  bundle relied on, so the stylesheet, the GLightbox library and the init
+  script silently vanished (#1, reported by @zoglo — thank you!).
+  `RegisterLightboxAssetsListener` (the `generatePage` hook) is replaced by
+  `InjectLightboxAssetsListener`, a `kernel.response` listener that injects
+  the assets directly into the rendered HTML. This works for both the legacy
+  and the Twig/slot rendering path — see `docs/DECISIONS.md` ADR-007.
+
+### Added
+- PHPUnit test suite (`tests/`) covering the new listener's scope, content
+  type and malformed-body guards.
+
 ## [3.0.1] - 2026-09-05
 
 ### Changed
