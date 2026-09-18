@@ -21,10 +21,12 @@ Galerie-Gruppierung.
 
 ## Funktionsweise
 
-1. Ein `generatePage`-Hook registriert auf jeder Frontend-Seite:
-   - `bundles/contaothelightbox/css/glightbox.min.css`
-   - `bundles/contaothelightbox/js/glightbox.min.js`
-   - `bundles/contaothelightbox/js/lightbox.js` (Init)
+1. Ein Response-Listener hängt auf jeder Frontend-HTML-Seite direkt in die
+   ausgelieferte Antwort ein — unabhängig vom Seitentemplate (klassisch oder
+   Twig-basierte Content-Composition/Slots):
+   - `bundles/contaothelightbox/css/glightbox.min.css` vor `</head>`
+   - `bundles/contaothelightbox/js/glightbox.min.js` und
+     `bundles/contaothelightbox/js/lightbox.js` (Init) vor `</body>`
 2. `lightbox.js` kopiert bei jedem `a[data-lightbox]`-Link den `data-lightbox`-Wert
    nach `data-gallery` (zufällige Gruppe, wenn leer) und startet
    `GLightbox({ selector: 'a[data-lightbox]' })`.

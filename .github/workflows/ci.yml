@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    name: Composer validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+      - run: composer validate --strict --no-check-publish
+
+  lint:
+    name: PHP syntax (${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - run: find src -name '*.php' -print0 | xargs -0 -n1 -P4 php -l
+
+  test:
+    name: PHPUnit (Contao ${{ matrix.contao }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # composer always resolves each constraint to the newest satisfying
+        # core-bundle release, and that release's own PHP floor currently
+        # differs per Contao major — pair the runner's PHP to match, rather
+        # than fixing one PHP version for both legs.
+        include:
+          - contao: '^5.3'
+            php: '8.3'
+          - contao: '^6.0'
+            php: '8.4'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - run: composer require --no-update "contao/core-bundle:${{ matrix.contao }}"
+      # --no-plugins: this only resolves dependencies and runs PHPUnit against
+      # mocked HTTP objects, it never serves the vendor/bundles assets that
+      # contao-components/installer (a Composer plugin) would publish, so
+      # there is nothing for that plugin to do — and composer's non-interactive
+      # allow-plugins prompt would otherwise hard-fail the install.
+      - run: composer update --prefer-dist --no-interaction --no-progress --no-plugins
+      - run: vendor/bin/phpunit
