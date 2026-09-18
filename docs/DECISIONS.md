@@ -168,8 +168,8 @@ major upgrade (e.g. to 4.x) would be a corresponding bundle major bump.
 ## ADR-007: Asset injection moved from the `generatePage` hook to a `kernel.response` listener
 
 **Date:** 2026-09-17
-**Status:** Accepted — supersedes the mechanism chosen in ADR-002 (the
-underlying goal, "assets independent of the page template", is unchanged)
+**Status:** Superseded by ADR-008 — the diagnosis that TL_CSS/TL_JAVASCRIPT
+"doesn't work for modern layouts" was wrong; only the trigger was broken
 
 **Context:**
 Issue #1 reported that the lightbox stopped working on front end pages built
@@ -206,3 +206,62 @@ template built it — legacy `PageRegular` pages included.
   `ReplaceDynamicScriptTagsListener`'s combining/versioning. Acceptable: this
   bundle only ever added its own three fixed, `|static`-equivalent assets: no
   dynamic combination was happening for them regardless.
+
+**Post-mortem (2026-09-18):** Wrong. `ContentCompositionBuilder` (the modern
+rendering path's builder) reads `TL_CSS`/`TL_JAVASCRIPT` directly — see
+ADR-008. The trigger was the only broken part; the mechanism itself was fine.
+
+---
+
+## ADR-008: Back to `TL_CSS`/`TL_JAVASCRIPT`, now triggered by a `kernel.request` + `ScopeMatcher` listener
+
+**Date:** 2026-09-18
+**Status:** Accepted — corrects the diagnosis in ADR-007; supersedes its
+mechanism, not its context
+
+**Context:**
+@zoglo reviewed PR #2 after it merged and pushed back on the `kernel.response`
+string-replace approach: use an asset listener with `ScopeMatcher` and let
+Contao populate `TL_CSS`/`TL_JAVASCRIPT` instead of hand-rolling HTML
+injection. Checking this against the actual `contao/core-bundle` 6.0 source
+confirmed the pushback: `ContentCompositionBuilder::addResponseContextToTemplate()`
+(the class rendering Twig-based content composition / slot layouts) reads
+`$GLOBALS['TL_CSS']` / `$GLOBALS['TL_JAVASCRIPT']` directly and turns them into
+tags via `Template::generateStyleTag()` / `generateScriptTag()` — the exact
+same call the legacy `PageRegular` path uses. ADR-007's claim that "this
+mechanism doesn't work for modern layouts" was **wrong**: the mechanism works
+fine on both rendering paths. The only thing that was ever broken is the
+*trigger* — the `generatePage` hook only fires from inside
+`PageRegular::generate()`, never for slot layouts — which ADR-007 correctly
+diagnosed but then over-corrected by replacing the whole mechanism instead of
+just the trigger.
+
+(One nuance zoglo's comment implied but that doesn't hold up: neither
+`generateStyleTag()` nor `generateScriptTag()` sets a CSP `nonce` attribute on
+external-src tags — only inline styles do, via `generateInlineStyle()`. A
+strict nonce-only CSP would block asset tags from either approach equally, so
+CSP isn't a differentiator here. The `str_replace` approach's real problems
+are its fragility — a literal `</head>`/`</body>` substring anywhere else in
+the page, e.g. inside a rich-text field or an embed snippet, gets corrupted
+too, since `str_replace()` rewrites every occurrence — and that it reimplements
+tag-building Contao already does correctly.)
+
+**Decision:**
+Restore `TL_CSS`/`TL_JAVASCRIPT` registration (structurally close to the
+original `RegisterLightboxAssetsListener` from ADR-002), but trigger it from a
+`#[AsEventListener(event: KernelEvents::REQUEST)]` listener gated on the
+injected `Contao\CoreBundle\Routing\ScopeMatcher::isFrontendMainRequest()`
+instead of the `generatePage` hook. This fires for every front end main
+request regardless of which controller renders the page — the same coverage
+ADR-007 was after, without reimplementing Contao's asset pipeline.
+
+**Consequences:**
+- (+) Correct diagnosis this time, verified directly against `contao/core-bundle`
+  source rather than assumed.
+- (+) Tags go through Contao's own `Template::generateStyleTag()` /
+  `generateScriptTag()`, with consistent `HtmlAttributes` escaping.
+- (+) No risk of corrupting unrelated `</head>`/`</body>`-like substrings
+  elsewhere in the page.
+- (+) Smaller listener, no manual HTML string building.
+- (−) None identified. `RegisterLightboxAssetsListenerTest` covers the
+  frontend-main-request gate directly against a mocked `ScopeMatcher`.

@@ -21,12 +21,13 @@ Galerie-Gruppierung.
 
 ## Funktionsweise
 
-1. Ein Response-Listener hängt auf jeder Frontend-HTML-Seite direkt in die
-   ausgelieferte Antwort ein — unabhängig vom Seitentemplate (klassisch oder
-   Twig-basierte Content-Composition/Slots):
-   - `bundles/contaothelightbox/css/glightbox.min.css` vor `</head>`
+1. Ein `kernel.request`-Listener registriert auf jeder Frontend-Hauptanfrage
+   (klassisches Seitentemplate oder Twig-basierte Content-Composition/Slots,
+   per `ScopeMatcher::isFrontendMainRequest()` erkannt) die Assets ganz normal
+   über `$GLOBALS['TL_CSS']` / `$GLOBALS['TL_JAVASCRIPT']`:
+   - `bundles/contaothelightbox/css/glightbox.min.css`
    - `bundles/contaothelightbox/js/glightbox.min.js` und
-     `bundles/contaothelightbox/js/lightbox.js` (Init) vor `</body>`
+     `bundles/contaothelightbox/js/lightbox.js` (Init)
 2. `lightbox.js` kopiert bei jedem `a[data-lightbox]`-Link den `data-lightbox`-Wert
    nach `data-gallery` (zufällige Gruppe, wenn leer) und startet
    `GLightbox({ selector: 'a[data-lightbox]' })`.
