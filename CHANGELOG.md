@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.0.4] - 2026-09-18
+
+### Changed
+- Asset registration moved (again) from the `kernel.response` string-replace
+  listener 3.0.3 introduced back to `$GLOBALS['TL_CSS']` /
+  `$GLOBALS['TL_JAVASCRIPT']`, this time triggered by a `kernel.request`
+  listener gated on `ScopeMatcher::isFrontendMainRequest()` instead of the
+  `generatePage` hook. Contao's `ContentCompositionBuilder` (the class that
+  renders Twig-based content composition / slot layouts) reads
+  `TL_CSS`/`TL_JAVASCRIPT` directly — the 3.0.3 diagnosis that "this mechanism
+  doesn't work for modern layouts" was wrong; only the *trigger*
+  (`generatePage`) was broken. Straight `str_replace()` on the whole response
+  body is fragile (any literal `</head>`/`</body>` substring elsewhere in the
+  page — an editor's rich-text field, an embed snippet — would get corrupted
+  too) and reimplements what Contao's own asset pipeline already does
+  correctly. Thanks to @zoglo for catching this on #2.
+  See `docs/DECISIONS.md` ADR-008.
+
 ## [3.0.3] - 2026-09-18
 
 ### Fixed
