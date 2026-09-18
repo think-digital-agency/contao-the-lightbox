@@ -38,12 +38,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        contao: ['^5.3', '^6.0']
+        # composer always resolves each constraint to the newest satisfying
+        # core-bundle release, and that release's own PHP floor currently
+        # differs per Contao major — pair the runner's PHP to match, rather
+        # than fixing one PHP version for both legs.
+        include:
+          - contao: '^5.3'
+            php: '8.3'
+          - contao: '^6.0'
+            php: '8.4'
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: ${{ matrix.php }}
           coverage: none
       - run: composer require --no-update "contao/core-bundle:${{ matrix.contao }}"
       - run: composer update --prefer-dist --no-interaction --no-progress
